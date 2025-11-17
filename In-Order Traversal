@@ -1,0 +1,65 @@
+#In-Order Traversal
+
+Method 1 - Recursive Apporach.
+import java.util.*;
+class TreeNode{
+    int data;
+    TreeNode left;
+    TreeNode right;
+
+    TreeNode(int data){
+        this.data=data;
+        this.left=null;
+        this.right=null;
+    }
+}
+class Solution {
+    private void recursiveInorder(TreeNode root, List<Integer> arr) {
+        if (root == null) return;
+        recursiveInorder(root.left, arr);
+        arr.add(root.data);
+        recursiveInorder(root.right, arr);
+    }
+    public List<Integer> inorder(TreeNode root) {
+        List<Integer> arr = new ArrayList<>();
+        recursiveInorder(root, arr);
+        return arr;
+    }
+}
+class Main{
+   public static void main(String[] args) {
+    TreeNode root = new TreeNode(1);
+    root.left = new TreeNode(2);
+    root.right = new TreeNode(3);
+    root.left.left = new TreeNode(4);
+    root.left.right = new TreeNode(5);
+
+    Solution sol = new Solution();
+    List<Integer> result = sol.inorder(root);
+    for (int val : result) System.out.print(val + " ");
+} 
+}
+
+Method 2 - Iterative Apporach.
+class Solution {
+    public List<Integer> inorder(TreeNode root) {
+        TreeNode node = root;
+        Stack<TreeNode>st = new Stack<>();
+        List<Integer> inorder = new ArrayList<>();
+        while(true){
+            if(node != null){
+                st.push(node);
+                node = node.left;
+            }
+            else{
+                if(st.isEmpty()){
+                    break;
+                }
+                node = st.pop();
+                inorder.add(node.data);
+                node = node.right;
+            }
+        }
+        return inorder;
+    }
+}
