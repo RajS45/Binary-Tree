@@ -1,0 +1,36 @@
+-->> ZigZag Binary Tree Traversal.
+class Solution {
+    public List<List<Integer>> zigzagLevelOrder(TreeNode root) {
+        List<List<Integer>> res = new ArrayList<>();
+        if(root == null) return res;
+        int h = getHeight(root);
+        boolean leftToRight = true;
+        for(int i=1; i<=h; i++){
+            List<Integer> curr = new ArrayList<>();
+            fun(root, i, leftToRight, curr);
+            res.add(curr);
+            leftToRight = !leftToRight;
+        }
+        return res;
+    }
+
+    public int getHeight(TreeNode root){
+        if(root == null) return 0;
+        return 1 + Math.max(getHeight(root.left), getHeight(root.right));
+    }
+
+    public void fun(TreeNode root, int level, boolean leftToRight, List<Integer> curr){
+        if(root == null) return;
+        if(level == 1){
+            curr.add(root.val);
+        } else {
+            if(leftToRight){
+                fun(root.left, level-1, leftToRight, curr);
+                fun(root.right, level-1, leftToRight, curr);
+            } else {
+                fun(root.right, level-1, leftToRight, curr);
+                fun(root.left, level-1, leftToRight, curr);
+            }
+        }
+    }
+}
