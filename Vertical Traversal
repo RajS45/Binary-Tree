@@ -1,4 +1,12 @@
 -->> Vertical Traversal.
+import java.util.*;
+class TreeNode {
+    int data;
+    TreeNode left, right;
+    TreeNode(int data) {
+        this.data = data;
+    }
+}
 class Solution {
     public List<List<Integer>> verticalTraversal(TreeNode root) {
         List<List<Integer>> result = new ArrayList<>();
@@ -21,8 +29,20 @@ class Solution {
         if (node == null) return;
         nodesMap.putIfAbsent(x, new TreeMap<>());
         nodesMap.get(x).putIfAbsent(y, new PriorityQueue<>());
-        nodesMap.get(x).get(y).offer(node.data);
+        nodesMap.get(x).get(y).add(node.data);
         dfs(node.left, x - 1, y + 1, nodesMap);
         dfs(node.right, x + 1, y + 1, nodesMap);
+    }
+    public static void main(String[] args) {
+        TreeNode root = new TreeNode(3);
+        root.left = new TreeNode(9);
+        root.right = new TreeNode(20);
+        root.right.left = new TreeNode(15);
+        root.right.right = new TreeNode(7);
+        Solution sol = new Solution();
+        List<List<Integer>> result = sol.verticalTraversal(root);
+        for (List<Integer> column : result) {
+            System.out.println(column);
+        }
     }
 }
