@@ -7,7 +7,7 @@ This node also contains references and pointers to its left and right children s
 Root Node
 Root Node: The topmost node of a binary tree from which all other nodes stem out.
 This serves as the entry point for traversing the tree structure.
-
+ 
 Children Nodes
 Children Nodes: Nodes directly connected to a parent node.
 In a binary tree, a parent node can have zero, one, or two children nodes, each situated to the left or right of the parent node.
