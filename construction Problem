@@ -1,0 +1,134 @@
+#Construction Problems
+1.Requirement needed to construct a unique BT. 
+class Solution {
+    public boolean uniqueBinaryTree(int a, int b) {
+        return !(a == b || (a == 1 && b == 3) || (a == 3 && b == 1));
+    }
+	public static void main(String []args){
+		Solution sol = new Solution();
+		System.out.println(sol.uniqueBinaryTree(1,2));
+		System.out.println(sol.uniqueBinaryTree(3,2));
+	}
+}
+2.Construct a BT from PreOder and InOrder.
+class Solution{    
+    public TreeNode buildTree(int[] preorder, int[] inorder) {
+        Map<Integer, Integer> inMap = new HashMap<>();
+        for (int i = 0; i < inorder.length; i++) {
+            inMap.put(inorder[i], i);
+        }
+        TreeNode root = buildTree(preorder, 0, preorder.length - 1, inorder, 0, inorder.length - 1, inMap);
+        return root;
+    }
+    private TreeNode buildTree(int[] preorder, int preStart, int preEnd,
+                               int[] inorder, int inStart, int inEnd, Map<Integer, Integer> inMap) {
+        if (preStart > preEnd || inStart > inEnd) {
+            return null;
+        }
+        TreeNode root = new TreeNode(preorder[preStart]);
+        int inRoot = inMap.get(root.data);
+        int numsLeft = inRoot - inStart;
+        root.left = buildTree(preorder, preStart + 1, preStart + numsLeft,
+                inorder, inStart, inRoot - 1, inMap);
+        root.right = buildTree(preorder, preStart + numsLeft + 1, preEnd,
+                inorder, inRoot + 1, inEnd, inMap);
+        return root;
+    }
+
+  public static void main(String[] args) {
+        int[] inorder = {9, 3, 15, 20, 7};
+        int[] preorder = {3, 9, 20, 15, 7};
+
+        Solution sol = new Solution();
+        TreeNode root = sol.buildTree(preorder, inorder);
+        System.out.println("Inorder of Unique Binary Tree Created:");
+        sol.printInorder(root);
+        System.out.println();
+    }
+}
+3.Construct a BT from PostOrder and InOrder
+class Solution {
+    public TreeNode buildTree(int[] inorder, int[] postorder) {
+        Map<Integer, Integer> inMap = new HashMap<>();
+        for (int i = 0; i < inorder.length; i++) {
+            inMap.put(inorder[i], i);
+        }
+        return buildTree(inorder, 0, inorder.length - 1,
+                         postorder, 0, postorder.length - 1, inMap);
+    }
+
+    private TreeNode buildTree(int[] inorder, int inStart, int inEnd,
+                               int[] postOrder, int postStart, int postEnd,
+                               Map<Integer, Integer> inMap) {
+        if (postStart > postEnd || inStart > inEnd) {
+            return null;
+        }
+
+        TreeNode root = new TreeNode(postOrder[postEnd]); // root from postorder
+        int inRoot = inMap.get(postOrder[postEnd]);       // root index in inorder
+        int numsLeft = inRoot - inStart;                  // size of left subtree
+
+        root.left = buildTree(inorder, inStart, inRoot - 1,
+                              postOrder, postStart, postStart + numsLeft - 1, inMap);
+
+        root.right = buildTree(inorder, inRoot + 1, inEnd,
+                               postOrder, postStart + numsLeft, postEnd - 1, inMap);
+
+        return root;
+    }
+}
+4.Serialize and De-serialize BT.
+class Solution {
+    public String serialize(TreeNode root) {
+        if (root == null) {
+            return "";
+        }
+        StringBuilder sb = new StringBuilder();
+        Queue<TreeNode> q = new LinkedList<>();
+        q.offer(root);
+        while (!q.isEmpty()) {
+            TreeNode curNode = q.poll();
+            if (curNode == null) {
+                sb.append("#,");
+            } else {
+                sb.append(curNode.data).append(",");
+                q.offer(curNode.left);
+                q.offer(curNode.right);
+            }
+        }
+        return sb.toString();
+    }
+    public TreeNode deserialize(String data) {
+        if (data.isEmpty()) {
+            return null;
+        }
+        StringBuilder s = new StringBuilder(data);
+        String str;
+        int commaIndex = s.indexOf(",");
+        str = s.substring(0, commaIndex);
+        s.delete(0, commaIndex + 1);
+        TreeNode root = new TreeNode(Integer.parseInt(str));
+        Queue<TreeNode> q = new LinkedList<>();
+        q.offer(root);
+        while (!q.isEmpty()) {
+            TreeNode node = q.poll();
+            commaIndex = s.indexOf(",");
+            str = s.substring(0, commaIndex);
+            s.delete(0, commaIndex + 1);
+            if (!str.equals("#")) {
+                TreeNode leftNode = new TreeNode(Integer.parseInt(str));
+                node.left = leftNode;
+                q.offer(leftNode);
+            }
+            commaIndex = s.indexOf(",");
+            str = s.substring(0, commaIndex);
+            s.delete(0, commaIndex + 1);
+            if (!str.equals("#")) {
+                TreeNode rightNode = new TreeNode(Integer.parseInt(str));
+                node.right = rightNode;
+                q.offer(rightNode);
+            }
+        }
+        return root;
+    }  
+}
