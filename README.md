@@ -3,7 +3,7 @@ It consists of nodes, where each node can have at most two children nodes, known
 
 Nodes: Each node in a binary tree contains a piece of data, often referred to as the node’s value or key.
 This node also contains references and pointers to its left and right children so that we can traverse from one node to another in a hierarchical order.
-
+ 
 Root Node
 Root Node: The topmost node of a binary tree from which all other nodes stem out.
 This serves as the entry point for traversing the tree structure.
