@@ -7,7 +7,7 @@ class Solution {
         TreeNode curr = root.left;
         while (curr != null) {
             if (!isLeaf(curr)) res.add(curr.data);
-            if (curr.left != null) curr = curr.left;
+            if (curr.left != null) curr = curr.left; 
             else curr = curr.right;
         }
     }
